@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoFetcherMonolithicConso
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PhotoFetcherDatabase", "PhotoFetcherDatabase\PhotoFetcherDatabase.sqlproj", "{D03B0C72-28AF-42E7-81B0-3571C75520B9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{1B26DD2C-8657-4DEF-BA5C-52B6006DD681}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bad-Code", "Bad-Code", "{ADCBC914-8387-4BC1-ACD2-EAE71E9E5D99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{423CC02C-39BE-41F7-81BA-4049023B8B20} = {ADCBC914-8387-4BC1-ACD2-EAE71E9E5D99}
+		{D03B0C72-28AF-42E7-81B0-3571C75520B9} = {1B26DD2C-8657-4DEF-BA5C-52B6006DD681}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF3C2CC4-6901-494D-B0A8-3634F0F4DBD3}
