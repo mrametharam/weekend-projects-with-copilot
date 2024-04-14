@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Text.Json;
 using Dapper;
+using PhotoFetcherMonolithicConsoleApplication.TheApiService.v2.Core;
+using PhotoFetcherMonolithicConsoleApplication.TheApiService.v2.Data.Photo;
 
 namespace PhotoFetcherMonolithicConsoleApplication.TheApiService.v2;
 
@@ -12,6 +14,10 @@ internal class ApiService
         HttpClient httpClient = new HttpClient();
         List<Domain.Models.Photo> photos = new();
 
+        // TODO: Update the exception handlers to be more specific.
+        // TODO: Build a logger class that performs the console.Writeline and the stopwatch tasks.
+        // TODO: Look at how the chain of responsibility pattern can be used to perform the API call, validation of the data, then the Saving to the DB.
+
         try
         {
             string elapsedTime = "";
@@ -19,8 +25,9 @@ internal class ApiService
 
             stopWatch.Start();
 
-            for (int id = 1000; id <= 5000; id++)
+            for (int id = 2000; id <= 5000; id++)
             {
+                #region TODO: Move this into a service that will fetch the data and save it to a list.
                 using HttpResponseMessage response = await httpClient.GetAsync($"{Configuration.PhotosApi.Url}/{id}");
 
                 var responseCode = (int)response.StatusCode;
@@ -40,6 +47,7 @@ internal class ApiService
                     var photo = JsonSerializer.Deserialize<Domain.Models.Photo>(responseBody, options) ?? new Domain.Models.Photo();
 
                     photos.Add(photo);
+                    #endregion
 
                     Console.WriteLine($"Record:: Id: {photo.Id}, Title: {photo.Title}, Album Id: {photo.AlbumId}, Url: {photo.Url}, Thumbnail Url: {photo.ThumbnailUrl}\n");
 
@@ -47,16 +55,10 @@ internal class ApiService
 
                     try
                     {
-                        var saveRec = Data.PhotoDbMapper.MapFromPhoto(photo, DateTime.UtcNow, responseBody);
+                        var saveRec = PhotoDbMapper.MapFromPhoto(photo, DateTime.UtcNow, responseBody);
 
-                        using (var dbConn = new SqlConnection(Configuration.ConnectionStrings.LabWorXDb))
-                        {
-                            dbConn.Open();
-
-                            await dbConn.ExecuteAsync(Data.PhotoDbSqlStatements.Insert, saveRec);
-
-                            dbConn.Close();
-                        }
+                        var photoRepo = new PhotosRepository();
+                        await photoRepo.Insert(saveRec);
 
                         Console.WriteLine($"SAVED! PhotoId: {saveRec.PhotoId}, Title: {saveRec.Title}, Url: {saveRec.Url}");
                     }

@@ -1,4 +1,4 @@
-﻿namespace PhotoFetcherMonolithicConsoleApplication.TheApiService.v2.Data;
+﻿namespace PhotoFetcherMonolithicConsoleApplication.TheApiService.v2.Data.Photo;
 
 internal class PhotoDbSqlStatements
 {
