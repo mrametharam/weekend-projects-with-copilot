@@ -1,4 +1,4 @@
-﻿namespace PhotoFetcherMonolithicConsoleApplication.TheApiService.v2;
+﻿namespace PhotoFetcherMonolithicConsoleApplication.TheApiService.v2.Core;
 
 public class Configuration
 {
