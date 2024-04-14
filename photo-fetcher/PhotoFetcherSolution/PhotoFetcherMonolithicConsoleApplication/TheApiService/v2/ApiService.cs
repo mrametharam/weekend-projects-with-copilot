@@ -9,11 +9,11 @@ internal class ApiService
 {
     HttpClient _httpClient = new HttpClient();
     List<Domain.Models.Photo> _photos = new();
+    Logger _logger = new();
 
     internal async Task ExecuteAsync()
     {
         // TODO: Update the exception handlers to be more specific.
-        // TODO: Build a logger class that performs the console.Writeline and the stopwatch tasks.
         // TODO: Look at how the chain of responsibility pattern can be used to perform the API call, validation of the data, then the Saving to the DB.
 
         string elapsedTime = "";
@@ -21,7 +21,7 @@ internal class ApiService
 
         stopWatch.Start();
 
-        for (int id = 2500; id <= 2520; id++)
+        for (int id = 2530; id <= 2600; id++)
         {
             await FetchData(id);
 
@@ -38,20 +38,21 @@ internal class ApiService
             var photoRepo = new PhotosRepository();
             await photoRepo.Insert(saveRec);
 
-            Console.WriteLine($"Saved photo: {saveRec.PhotoId} / {_photos.Count}");
+            _logger.LogInformation($"Saved photo: {saveRec.PhotoId} / {_photos.Count}");
         }
 
         TimeSpan ts = stopWatch.Elapsed;
         elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
 
-        Console.WriteLine($"Elapsed Time: {elapsedTime}");
-        Console.WriteLine("\n====================\n");
+        _logger.LogInformation($"Elapsed Time: {elapsedTime}");
+        _logger.LogInformation("====================");
 
         stopWatch.Stop();
 
-        Console.WriteLine($"Total: {_photos.Count},  Completed in: {elapsedTime}");
+        _logger.LogInformation($"Total: {_photos.Count},  Completed in: {elapsedTime}");
     }
 
+    // TODO: Look at moving this into a separate class
     private async Task FetchData(int id)
     {
         try
@@ -61,7 +62,7 @@ internal class ApiService
             var responseCode = (int)response.StatusCode;
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            Console.WriteLine($"{responseCode}: {responseBody}");   // TODO: Move this into a logging class.
+            _logger.LogInformation($"{responseCode}: {responseBody}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -77,7 +78,7 @@ internal class ApiService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Unknow Exception: {ex.Message}");
+            _logger.LogInformation($"Unknow Exception: {ex.Message}");
         }
     }
 }
